@@ -33,12 +33,16 @@ dispatcher.add_handler(start_handler)
 
 def reply(bot, update):
     userText = str(update.message.text)
-    answer = str(english_bot.get_response(userText))
-
     botName = bot.name
 
+    is_reply_to_bot = False
+    if update.message.reply_to_message is not None:
+        is_reply_to_bot = update.message.reply_to_message.from_user.username == bot.username
+
+    answer = str(english_bot.get_response(userText))
+
     # TODO: Move answer probability to a config file
-    if random.random() <= 0.15 or botName in userText:
+    if random.random() <= 0.15 or botName in userText or is_reply_to_bot:
         bot.send_message(chat_id=update.message.chat_id, text=answer)
 
 
