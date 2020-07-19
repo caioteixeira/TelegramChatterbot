@@ -1,0 +1,4 @@
+chatterbot >= 1.0
+chatterbot-corpus
+python-telegram-bot
+psycopg2
