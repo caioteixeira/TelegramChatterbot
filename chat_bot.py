@@ -37,7 +37,8 @@ def reply(bot, update):
 
     botName = bot.name
 
-    if random.random() <= 0.2 or botName in userText:
+    # TODO: Move answer probability to a config file
+    if random.random() <= 0.15 or botName in userText:
         bot.send_message(chat_id=update.message.chat_id, text=answer)
 
 
