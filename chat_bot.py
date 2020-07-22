@@ -2,6 +2,7 @@
 import os
 import json
 import random
+import dateutil.parser
 
 from chatterbot import ChatBot
 from chatterbot.trainers import ListTrainer
@@ -63,13 +64,19 @@ def train(bot, update):
 
     train_data = []
     list_trainer = ListTrainer(english_bot)
+    last_date = None
 
     for message in messages["messages"]:
         if message["text"] is str:
             train_data.append(message["text"])
-        if len(train_data) > 100:
-            list_trainer.train(train_data)
-            train_data = []
+        date = dateutil.parser.parse(message["date"])
+
+        if last_date is not None:
+            diff = date - last_date
+            if diff.seconds >= 60 * 60 * 4:
+                list_trainer.train(train_data)
+                train_data = []
+        last_date = date
 
 
 train_handler = MessageHandler(Filters.document, train)
