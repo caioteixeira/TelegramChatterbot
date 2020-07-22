@@ -37,6 +37,11 @@ def reply(bot, update):
 
     is_reply_to_bot = False
     if update.message.reply_to_message is not None:
+        # Train message responses
+        train_data = [update.message.reply_to_message.text, update.message.text]
+        list_trainer = ListTrainer(english_bot)
+        list_trainer.train(train_data)
+
         is_reply_to_bot = update.message.reply_to_message.from_user.username == bot.username
 
     answer = str(english_bot.get_response(userText))
