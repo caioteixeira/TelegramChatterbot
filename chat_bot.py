@@ -66,9 +66,18 @@ def train(bot, update):
     list_trainer = ListTrainer(english_bot)
     last_date = None
 
+    message_dict = dict()
+
     for message in messages["messages"]:
         if message["text"] is str:
             train_data.append(message["text"])
+            message_dict[message["id"]] = message["text"]
+
+            if "reply_to_message_id" in message and message["reply_to_message_id"] in message_dict:
+                prev_message = message_dict[message["reply_to_message_id"]]
+                pair = [prev_message, message["text"]]
+                list_trainer.train(pair)
+
         date = dateutil.parser.parse(message["date"])
 
         if last_date is not None:
